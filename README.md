@@ -6,10 +6,8 @@ To Invite the bot to your Discord Server [Click Here](https://discord.com/api/oa
 
 Instruccions:
 <br/>
-Clone or download code
-
-Run npm start to activate bot
-
+Clone or download code<br/>
+Run npm start to activate bot<br/>
 Bot is ready!
 
 Bot Commands Available:
