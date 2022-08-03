@@ -1,13 +1,12 @@
-import dotenv from "dotenv";
-dotenv.config();
+const dotenv = require("dotenv").config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const GUILD_ID = process.env.GUILD_ID;
 
-import { SlashCommandBuilder, Routes } from "discord.js";
-import { REST } from "@discordjs/rest";
+const { SlashCommandBuilder, Routes } = require("discord.js");
+const { REST } = require("@discordjs/rest");
 
 const commands = [
   new SlashCommandBuilder()

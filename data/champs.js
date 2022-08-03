@@ -168,4 +168,4 @@ const champs = [
   "Zyra",
 ];
 
-export { champs, randomChamp };
+module.exports = { champs, randomChamp };

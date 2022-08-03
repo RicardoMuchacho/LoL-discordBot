@@ -1,11 +1,16 @@
 //invite link: https://discord.com/api/oauth2/authorize?client_id=1002349680388223139&permissions=2147493888&scope=bot%20applications.commands
 
-import dotenv from "dotenv";
-dotenv.config();
+const dotenv = require("dotenv").config();
 
-import { champs, randomChamp } from "./data/champs.js";
+const fs = require("node:fs");
+const path = require("node:path");
+const { champs, randomChamp } = require("./data/champs.js");
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 
-import { Client, IntentsBitField, GatewayIntentBits } from "discord.js";
+const CLIENT_ID = process.env.CLIENT_ID;
+const PUBLIC_KEY = process.env.PUBLIC_KEY;
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const GUILD_ID = process.env.GUILD_ID;
 
 const client = new Client({
   intents: [
@@ -15,41 +20,40 @@ const client = new Client({
   ],
 });
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const PUBLIC_KEY = process.env.PUBLIC_KEY;
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const GUILD_ID = process.env.GUILD_ID;
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, "src", "commands");
+const commandFiles = fs
+  .readdirSync(commandsPath)
+  .filter((file) => file.endsWith(".js"));
+
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+  // Set a new item in the Collection
+  // With the key as the command name and the value as the exported module
+  client.commands.set(command.data.name, command);
+}
 
 client.on("ready", () => {
-  // console.log("bot is ready!");
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  const { commandName } = interaction;
+  const command = client.commands.get(interaction.commandName);
 
-  if (commandName === "ping") {
-    await interaction.reply("Pong!");
-  } else if (commandName === "server") {
-    await interaction.reply(
-      `Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`
-    );
-  } else if (commandName === "user") {
-    await interaction.reply(
-      `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`
-    );
-  } else if (commandName === "spin") {
-    await interaction.reply(`Champ: ${randomChamp().toUpperCase()}`);
-  } else if (commandName === "troll") {
-    let onlineMembers = await interaction.channel.members.filter(
-      (member) => !member.user.bot
-    );
-    let usernames = await onlineMembers.map((member) => member.user.username);
-    let rndUser = usernames[Math.floor(Math.random() * usernames.length)];
-    console.log(rndUser);
-    await interaction.reply(`Troll: ${rndUser}`);
+  if (!command) return;
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: "There was an error while executing this command!",
+      ephemeral: true,
+    });
   }
 });
 
