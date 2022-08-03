@@ -15,5 +15,5 @@ Bot is ready!
 Bot Commands Available:
 <br/>
 /spin - picks random LoL champion to use
-
+<br/>
 /troll - picks random online user that will troll
