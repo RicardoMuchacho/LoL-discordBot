@@ -1,4 +1,4 @@
-# LoL-discordBot
+# LoL Roulette Discord Bot
 
 League-Roulette Discord Bot for Fun - Javascript, Node, Discord.js
 
