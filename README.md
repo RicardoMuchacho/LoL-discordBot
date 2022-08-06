@@ -7,7 +7,7 @@ League-Roulette Discord Bot for Fun - Javascript, Node, Discord.js
 <img
   src="/LoL_icon.png"
   alt="League Roulette"
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
+  style="display: inline-block; margin: 0 auto; max-width: 100px; max-height: 100px">
 
   
   
